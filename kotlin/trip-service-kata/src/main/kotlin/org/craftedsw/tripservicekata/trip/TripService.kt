@@ -9,7 +9,7 @@ open class TripService {
 
 	fun getTripsByUser(user: User): List<Trip> {
 		var tripList: List<Trip> = ArrayList<Trip>()
-        val loggedUser: User? = UserSession.instance.loggedUser
+		val loggedUser: User? = loggedInUser()
 		var isFriend: Boolean = false
 		if (loggedUser != null) {
 			for (friend in user.friends) {
@@ -19,11 +19,19 @@ open class TripService {
 				}
 			}
 			if (isFriend) {
-                tripList = TripDAO.findTripsByUser(user)
+				tripList = tripsBy(user)
 			}
 			return tripList
 		} else {
 			throw UserNotLoggedInException()
 		}
+	}
+
+	protected open fun loggedInUser(): User? {
+		return UserSession.instance.loggedUser
+	}
+
+	protected open fun tripsBy(user: User): List<Trip> {
+		return TripDAO.findTripsByUser(user)
 	}
 }
