@@ -18,14 +18,9 @@ class TripServiceShould extends Specification {
 
 	def service = new TestableTripService()
 
-	def loggedInUser = REGISTERED_USER
-
 	def 'throw exception if user is not logged in'() {
-		given:
-		loggedInUser = GUEST
-
 		when:
-		service.getTripsByUser(SOME_USER)
+		service.getTripsByUser(SOME_USER, GUEST)
 
 		then:
 		thrown(UserNotLoggedInException)
@@ -39,7 +34,7 @@ class TripServiceShould extends Specification {
 				.build()
 
 		expect:
-		service.getTripsByUser(stranger) == []
+		service.getTripsByUser(stranger, REGISTERED_USER) == []
 	}
 
 	def 'return friend trips if users are friends'() {
@@ -50,14 +45,10 @@ class TripServiceShould extends Specification {
 				.build()
 
 		expect:
-		service.getTripsByUser(friend).size() == 2
+		service.getTripsByUser(friend, REGISTERED_USER).size() == 2
 	}
 
 	class TestableTripService extends TripService {
-		User loggedInUser() {
-			return loggedInUser
-		}
-
 		List<Trip> tripsBy(User user) {
 			return user.trips
 		}
