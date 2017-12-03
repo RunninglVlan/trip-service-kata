@@ -12,6 +12,7 @@ class TripServiceShould extends Specification {
 	static final SOME_USER = new User()
 	static final REGISTERED_USER = new User()
 	static final ANOTHER_USER = new User()
+
 	static final LONDON = new Trip()
 	static final RIGA = new Trip()
 
