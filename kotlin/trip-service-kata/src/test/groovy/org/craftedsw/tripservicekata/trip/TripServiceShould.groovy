@@ -4,6 +4,8 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException
 import org.craftedsw.tripservicekata.user.User
 import spock.lang.Specification
 
+import static org.craftedsw.tripservicekata.user.UserBuilder.aUser
+
 class TripServiceShould extends Specification {
 
 	static final GUEST = null
@@ -15,7 +17,7 @@ class TripServiceShould extends Specification {
 
 	def service = new TestableTripService()
 
-	def loggedInUser
+	def loggedInUser = REGISTERED_USER
 
 	def 'throw exception if user is not logged in'() {
 		given:
@@ -30,10 +32,10 @@ class TripServiceShould extends Specification {
 
 	def 'return no trips if users are strangers'() {
 		given:
-		loggedInUser = REGISTERED_USER
-		def stranger = new User()
-		stranger.addFriend(SOME_USER)
-		stranger.addTrip(LONDON)
+		def stranger = aUser()
+				.friendsWith(SOME_USER)
+				.withTrips(LONDON)
+				.build()
 
 		expect:
 		service.getTripsByUser(stranger) == []
@@ -41,12 +43,10 @@ class TripServiceShould extends Specification {
 
 	def 'return friend trips if users are friends'() {
 		given:
-		loggedInUser = REGISTERED_USER
-		def friend = new User()
-		friend.addFriend(REGISTERED_USER)
-		friend.addFriend(ANOTHER_USER)
-		friend.addTrip(LONDON)
-		friend.addTrip(RIGA)
+		def friend = aUser()
+				.friendsWith(REGISTERED_USER, ANOTHER_USER)
+				.withTrips(LONDON, RIGA)
+				.build()
 
 		expect:
 		service.getTripsByUser(friend).size() == 2
