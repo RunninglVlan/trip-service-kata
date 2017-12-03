@@ -8,17 +8,16 @@ import java.util.*
 open class TripService {
 
 	fun getTripsByUser(user: User): List<Trip> {
-		var tripList: List<Trip> = ArrayList()
-		val loggedInUser: User? = loggedInUser()
-		if (loggedInUser != null) {
-			if (user.isFriendsWith(loggedInUser)) {
-				tripList = tripsBy(user)
-			}
-			return tripList
+		val loggedInUser: User = loggedInUser() ?: throw UserNotLoggedInException()
+
+		return if (user.isFriendsWith(loggedInUser)) {
+			tripsBy(user)
 		} else {
-			throw UserNotLoggedInException()
+			noTrips()
 		}
 	}
+
+	private fun noTrips(): ArrayList<Trip> = ArrayList()
 
 	protected open fun loggedInUser(): User? {
 		return UserSession.instance.loggedUser
