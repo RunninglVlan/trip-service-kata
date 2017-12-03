@@ -3,7 +3,11 @@ package org.craftedsw.tripservicekata.trip
 import org.craftedsw.tripservicekata.exception.CollaboratorCallException
 import org.craftedsw.tripservicekata.user.User
 
-class TripDAO {
+open class TripDAO {
+
+	open fun tripsBy(user: User): List<Trip> {
+		return findTripsByUser(user)
+	}
 
 	companion object {
 		@JvmStatic

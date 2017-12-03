@@ -16,7 +16,8 @@ class TripServiceShould extends Specification {
 	static final LONDON = new Trip()
 	static final RIGA = new Trip()
 
-	def service = new TestableTripService()
+	def tripDao = Stub(TripDAO)
+	def service = new TripService(tripDao)
 
 	def 'throw exception if user is not logged in'() {
 		when:
@@ -43,14 +44,9 @@ class TripServiceShould extends Specification {
 				.friendsWith(REGISTERED_USER, ANOTHER_USER)
 				.withTrips(LONDON, RIGA)
 				.build()
+		tripDao.tripsBy(friend) >> friend.trips
 
 		expect:
 		service.getTripsByUser(friend, REGISTERED_USER).size() == 2
-	}
-
-	class TestableTripService extends TripService {
-		List<Trip> tripsBy(User user) {
-			return user.trips
-		}
 	}
 }

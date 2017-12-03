@@ -4,7 +4,7 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException
 import org.craftedsw.tripservicekata.user.User
 import java.util.*
 
-open class TripService {
+open class TripService(private val tripDao: TripDAO) {
 
 	fun getTripsByUser(user: User, loggedInUser: User?): List<Trip> {
 		if (loggedInUser == null) {
@@ -20,7 +20,5 @@ open class TripService {
 
 	private fun noTrips(): ArrayList<Trip> = ArrayList()
 
-	protected open fun tripsBy(user: User): List<Trip> {
-		return TripDAO.findTripsByUser(user)
-	}
+	private fun tripsBy(user: User): List<Trip> = tripDao.tripsBy(user)
 }
