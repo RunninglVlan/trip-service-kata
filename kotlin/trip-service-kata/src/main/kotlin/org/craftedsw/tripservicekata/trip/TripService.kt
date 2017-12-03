@@ -6,15 +6,19 @@ import java.util.*
 
 open class TripService(private val tripDao: TripDAO) {
 
-	fun getTripsByUser(user: User, loggedInUser: User?): List<Trip> {
-		if (loggedInUser == null) {
-			throw UserNotLoggedInException()
-		}
+	fun userTrips(user: User, loggedInUser: User?): List<Trip> {
+		validate(loggedInUser)
 
 		return if (user.isFriendsWith(loggedInUser)) {
 			tripsBy(user)
 		} else {
 			noTrips()
+		}
+	}
+
+	private fun validate(loggedInUser: User?) {
+		if (loggedInUser == null) {
+			throw UserNotLoggedInException()
 		}
 	}
 
