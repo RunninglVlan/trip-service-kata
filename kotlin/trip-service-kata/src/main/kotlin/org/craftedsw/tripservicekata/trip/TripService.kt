@@ -4,7 +4,7 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException
 import org.craftedsw.tripservicekata.user.User
 import java.util.*
 
-open class TripService(private val tripDao: TripDAO) {
+class TripService(private val tripDao: TripDAO) {
 
 	fun userTrips(user: User, loggedInUser: User?): List<Trip> {
 		validate(loggedInUser)

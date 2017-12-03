@@ -7,7 +7,7 @@ import org.craftedsw.tripservicekata.user.User
 import org.craftedsw.tripservicekata.user.UserSession
 import java.util.*
 
-open class TripService_Original {
+class TripService_Original {
 
 	fun getTripsByUser(user: User): List<Trip> {
 		var tripList: List<Trip> = ArrayList<Trip>()
